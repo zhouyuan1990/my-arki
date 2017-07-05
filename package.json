@@ -5,10 +5,10 @@
   "author": "Arki Zhou",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "start": "node app.js",
-    "dev-start": "node app.js dev"
+    "dev": "node client/build/dev-server.js",
+    "build": "node client/build/build.js",
+    "start": "node server/app.js",
+    "dev-start": "node server/app.js dev"
   },
   "dependencies": {
     "koa": "^2.3.0",

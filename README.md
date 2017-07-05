@@ -19,12 +19,12 @@ npm start
 
 ```
 
-## Dev
+## Dev Setup
 
 ``` bash
+# back-end dev server at localhost:8889
+npm run dev-start
+
 # front-end dev mode with hot reload at localhost:8888
 npm run dev
-
-# back-end dev server at localhost:8889
-npm run build
 ```

@@ -6,7 +6,7 @@ const Router = require('koa-router');
 const convert = require('koa-convert');
 const logger = require('koa-logger');
 const bodyParser = require('koa-bodyparser');
-const routers = require('./server/routes/routers');
+const routers = require('./routes/routers');
 const serve = require('koa-static');
 const historyApiFallback = require('koa-history-api-fallback');
 
