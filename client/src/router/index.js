@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Hello from '@/components/Hello';
-import Resume from '@/components/Resume';
+import Resume from '@/components/resume/index';
 
 Vue.use(Router);
 
@@ -10,12 +10,10 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
       component: Hello
     },
     {
       path: '/resume',
-      name: 'Resume',
       component: Resume
     },
     {
