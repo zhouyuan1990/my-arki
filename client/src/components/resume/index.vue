@@ -6,6 +6,9 @@
     <resume-item>
       <project class="project"></project>
     </resume-item>
+    <resume-item>
+      <home class="home2"></home>
+    </resume-item>
   </resume>
 </template>
 
@@ -43,4 +46,11 @@ export default {
 .resume-item .project {
   background-color: #F3D7B5;
 }
+.resume-item .home2 {
+  background-color:#FDFFDF;
+}
+/*
+background-color:#DAF9CA;
+background-color:#C7B3E5;
+*/
 </style>

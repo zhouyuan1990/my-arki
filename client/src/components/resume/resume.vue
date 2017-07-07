@@ -1,5 +1,8 @@
 <template>
-  <div class="resume">
+  <div class="resume" tabindex="1" 
+       @mouseWheel="handleWheel"
+       @wheel="handleWheel"
+       @keydown="handleKeyDown">
     <div class="lang-panel">
       <a class="lang">中</a>
       <a class="lang">En</a>
@@ -17,13 +20,16 @@
 
 <script>
 import { addClass, removeClass } from '../../utils/class';
+import { getWheelDelta } from '../../utils/event';
+
 export default {
   name: 'resume',
   data() {
     return {
       ready: false,
       index: 0,
-      pages: []
+      pages: [],
+      transformKey: null
     }
   },
   methods: {
@@ -49,6 +55,66 @@ export default {
       });
 
       this.pages = pages;
+    },
+    handleWheel(event) {
+      let delta = getWheelDelta(event);
+      if (delta > 0) {
+        this.prev();
+      } else {
+        this.next();
+      }
+    },
+    handleKeyDown(event) {
+      console.log('keydown');
+      console.log(event);
+    },
+    next() {
+      if (this.index < this.pages.length - 1) {
+        this.moveTo(this.index + 1);
+      }
+    },
+    prev() {
+      if (this.index > 0) {
+        this.moveTo(this.index - 1);
+      }
+    },
+    moveTo(index) {
+      console.log('moveTo:' + index);
+      let direction; // 1 --- UP, -1 --- DOWN
+      let animateItem;
+
+      if (index > this.index) {
+        direction = -1;
+      } else {
+        direction = 1;
+      }
+
+      if (!this.transformKey) {
+        ['webkitTransform', 'OTransform', 'msTransform', 'MozTransform', 'transform'].every((key) => {
+          if (document.body.style[key] == undefined) {
+            return true;
+          } else {
+            this.transformKey = key;
+            return false;
+          }
+        });
+      }
+
+      let loopFrom = Math.min(this.index, index);
+      let loopTo = Math.max(this.index, index) - 1;
+      console.log(loopFrom + '-' + loopTo);
+      
+      for (let i = loopFrom; i < loopTo + 1; i++) {
+        console.log(i);
+        let item = this.pages[i];
+        if (direction < 0) {
+          item.style[this.transformKey] = 'translate3d(0px, -100%, 0px)';
+        } else {
+          item.style[this.transformKey] = '';
+        }
+      }
+
+      this.index = index;
     }
   },
   mounted() {
