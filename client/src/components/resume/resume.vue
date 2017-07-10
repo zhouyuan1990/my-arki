@@ -22,12 +22,14 @@
 import { addClass, removeClass } from '../../utils/class';
 import { getWheelDelta } from '../../utils/event';
 
+const transformKeys = ['webkitTransform', 'OTransform', 'msTransform', 'MozTransform', 'transform'];
 export default {
   name: 'resume',
   data() {
     return {
       ready: false,
       index: 0,
+      preWheelTime: 0,
       pages: [],
       transformKey: null
     }
@@ -57,6 +59,12 @@ export default {
       this.pages = pages;
     },
     handleWheel(event) {
+      let curWheelTime = new Date().getTime();
+      let timeDiff = curWheelTime - this.preWheelTime;
+      this.preWheelTime = curWheelTime;
+
+      if (timeDiff < 200) return;   //timeDiff < 200 to be considered as one wheelEvent
+
       let delta = getWheelDelta(event);
       if (delta > 0) {
         this.prev();
@@ -90,7 +98,7 @@ export default {
       }
 
       if (!this.transformKey) {
-        ['webkitTransform', 'OTransform', 'msTransform', 'MozTransform', 'transform'].every((key) => {
+        transformKeys.every((key) => {
           if (document.body.style[key] == undefined) {
             return true;
           } else {
