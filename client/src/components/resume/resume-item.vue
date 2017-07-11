@@ -28,9 +28,5 @@ export default {
   -moz-transition: all 1000ms cubic-bezier(0.550, 0.085, 0.000, 0.990);
   -o-transition: all 1000ms cubic-bezier(0.550, 0.085, 0.000, 0.990);
   transition: all 1000ms cubic-bezier(0.550, 0.085, 0.000, 0.990);
-  -webkit-transition-timing-function: cubic-bezier(0.550, 0.085, 0.000, 0.990);
-  -moz-transition-timing-function: cubic-bezier(0.550, 0.085, 0.000, 0.990);
-  -o-transition-timing-function: cubic-bezier(0.550, 0.085, 0.000, 0.990);
-  transition-timing-function: cubic-bezier(0.550, 0.085, 0.000, 0.990);
 }
 </style>

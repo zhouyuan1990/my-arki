@@ -8,12 +8,14 @@
       <a class="lang">En</a>
     </div>
     <ul class="main">
-      <slot></slot>
+      <slot name="item"></slot>
     </ul>
     <ul class="indicators">
       <li class="indicator"
           v-for="(page, $index) in pages"
-          :class="{ 'is-active': $index === index }"></li>
+          :class="{ 'is-active': $index === index }">
+        <a href="#"></a>      
+      </li>
     </ul>
   </div>
 </template>
@@ -30,33 +32,43 @@ export default {
       ready: false,
       index: 0,
       preWheelTime: 0,
+      lastAnimationTime: 0,
       pages: [],
       transformKey: null
     }
   },
   methods: {
     resumeItemCreated() {
-      console.log('resume item created');
+      // console.log('resume item created');
     },
     resumeItemDestroyed() {
-      console.log('resume item destroyed');
+      // console.log('resume item destroyed');
     },
     reInitPages() {
-      let children = this.$children,
+      let children = this.$slots.item,
           pages = [],
           length = children.length;
       this.index = 0;
       
       children.forEach(function(child, index) {
-        pages.push(child.$el);
-        child.$el.style.zIndex = length - index;
-        removeClass(child.$el, 'is-active');
-        if (index === 0) {
-          addClass(child.$el, 'is-active');
-        }
+        let elm = child.elm;
+        pages.push(elm);
+        elm.style.zIndex = length - index;
+        // removeClass(elm, 'is-active');
+        // if (index === 0) {
+        //   addClass(elm, 'is-active');
+        // }
       });
 
       this.pages = pages;
+    },
+    isMoving() {
+      let curTime = new Date().getTime();
+      let animationDuration = 1000;
+      if (curTime - this.lastAnimationTime < animationDuration + 200) {
+        return true;
+      }
+      return false;
     },
     handleWheel(event) {
       let curWheelTime = new Date().getTime();
@@ -87,6 +99,8 @@ export default {
       }
     },
     moveTo(index) {
+      if (this.isMoving()) return;
+
       console.log('moveTo:' + index);
       let direction; // 1 --- UP, -1 --- DOWN
       let animateItem;
@@ -113,7 +127,6 @@ export default {
       console.log(loopFrom + '-' + loopTo);
       
       for (let i = loopFrom; i < loopTo + 1; i++) {
-        console.log(i);
         let item = this.pages[i];
         if (direction < 0) {
           item.style[this.transformKey] = 'translate3d(0px, -100%, 0px)';
@@ -122,6 +135,7 @@ export default {
         }
       }
 
+      this.lastAnimationTime = new Date().getTime();
       this.index = index;
     }
   },
@@ -146,5 +160,21 @@ export default {
   position: absolute;
   height: 100%;
   width: 100%;
+}
+.indicators {
+  top: 50%;
+}
+.indicator {
+  height: 1rem;
+  width: 1rem;
+}
+.indicator > a {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 1px solid #ccc;
 }
 </style>

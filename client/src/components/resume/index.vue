@@ -1,12 +1,12 @@
 <template>
   <resume>
-    <resume-item>
+    <resume-item slot="item">
       <home class="home"></home>
     </resume-item>
-    <resume-item>
+    <resume-item slot="item">
       <project class="project"></project>
     </resume-item>
-    <resume-item>
+    <resume-item slot="item">
       <home class="home2"></home>
     </resume-item>
   </resume>
