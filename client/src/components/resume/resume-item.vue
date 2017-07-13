@@ -7,8 +7,15 @@
 <script>
 export default {
   name: 'resume-item',
+  props: {
+    index: {
+      type: Number,
+      default: 0
+    }
+  },
   mounted() {
     this.$parent && this.$parent.resumeItemCreated(this);
+    debugger;
   },
   destroyed() {
     this.$parent && this.$parent.resumeItemDestroyed(this);
@@ -24,9 +31,6 @@ export default {
   transform: translate3d(0px, 0px, 0px);
 }
 .item-easing {
-  -webkit-transition: all 1000ms cubic-bezier(0.550, 0.085, 0.000, 0.990);
-  -moz-transition: all 1000ms cubic-bezier(0.550, 0.085, 0.000, 0.990);
-  -o-transition: all 1000ms cubic-bezier(0.550, 0.085, 0.000, 0.990);
   transition: all 1000ms cubic-bezier(0.550, 0.085, 0.000, 0.990);
 }
 </style>

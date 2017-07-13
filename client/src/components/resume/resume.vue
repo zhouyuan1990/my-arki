@@ -8,9 +8,9 @@
       <a class="lang">En</a>
     </div>
     <ul class="main">
-      <slot name="item"></slot>
+      <slot name="item" :index="index"></slot>
     </ul>
-    <ul class="indicators">
+    <ul class="indicators" ref="indicators">
       <li class="indicator"
           v-for="(page, $index) in pages"
           :class="{ 'is-active': $index === index }">
@@ -39,10 +39,8 @@ export default {
   },
   methods: {
     resumeItemCreated() {
-      // console.log('resume item created');
     },
     resumeItemDestroyed() {
-      // console.log('resume item destroyed');
     },
     reInitPages() {
       let children = this.$slots.item,
@@ -163,10 +161,13 @@ export default {
 }
 .indicators {
   top: 50%;
+  transform: translateX(-50%);
+  margin-left: 0.7rem;
 }
 .indicator {
-  height: 1rem;
-  width: 1rem;
+  height: 0.7rem;
+  width: 0.7rem;
+  padding: 0.15rem 0 0.15rem 0;
 }
 .indicator > a {
   position: relative;
@@ -175,6 +176,10 @@ export default {
   height: 100%;
   box-sizing: border-box;
   border-radius: 50%;
-  border: 1px solid #ccc;
+  background-color: #fff;
+  opacity: 0.25;
+}
+.indicator.is-active > a {
+  opacity: 0.9;
 }
 </style>
