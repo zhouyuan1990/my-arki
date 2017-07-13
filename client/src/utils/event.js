@@ -1,10 +1,9 @@
 /**
- * Return wheel delta： 1 --- UP, -1 --- DOWN
+ * Return delta： positive means wheel up, negative means wheel down
  * @param event
  */
 let getWheelDelta = function(event) {
-  let value = event.wheelDelta || -event.deltaY || -event.detail;
-  let delta = Math.max(-1, Math.min(1, value));
+  let delta = event.wheelDelta || -event.deltaY || -event.detail;
   return delta;
 };
 

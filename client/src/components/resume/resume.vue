@@ -8,7 +8,7 @@
       <a class="lang">En</a>
     </div>
     <ul class="main">
-      <slot name="item" :index="index"></slot>
+      <slot name="item"></slot>
     </ul>
     <ul class="indicators" ref="indicators">
       <li class="indicator"
@@ -25,15 +25,18 @@ import { addClass, removeClass } from '../../utils/class';
 import { getWheelDelta } from '../../utils/event';
 
 const transformKeys = ['webkitTransform', 'OTransform', 'msTransform', 'MozTransform', 'transform'];
+let preWheelTime = 0,
+    lastAnimationTime = 0,
+    wheels = [];
+
 export default {
   name: 'resume',
   data() {
     return {
       ready: false,
       index: 0,
-      preWheelTime: 0,
-      lastAnimationTime: 0,
       pages: [],
+      bb: 1,
       transformKey: null
     }
   },
@@ -52,10 +55,6 @@ export default {
         let elm = child.elm;
         pages.push(elm);
         elm.style.zIndex = length - index;
-        // removeClass(elm, 'is-active');
-        // if (index === 0) {
-        //   addClass(elm, 'is-active');
-        // }
       });
 
       this.pages = pages;
@@ -63,23 +62,46 @@ export default {
     isMoving() {
       let curTime = new Date().getTime();
       let animationDuration = 1000;
-      if (curTime - this.lastAnimationTime < animationDuration + 200) {
+      if (curTime - lastAnimationTime < animationDuration + 200) {
         return true;
       }
       return false;
     },
+    isAccelerating() {
+      if (wheels.length < 10) return true;
+      let averageEnd = this.getLastWheelsAverage(10);
+      let averageMiddle = this.getLastWheelsAverage(50);
+      return averageEnd >= averageMiddle;
+    },
+    getLastWheelsAverage(number) {
+      let sum = 0;
+      let calcElements = wheels.slice(Math.max(wheels.length - number, 1));
+      for (let i = 0; i < calcElements.length; i++) {
+        sum += calcElements[i];
+      }
+      return Math.ceil(sum/number);
+    },
     handleWheel(event) {
+      event.preventDefault();   //prevent page drag down in mac
+
       let curWheelTime = new Date().getTime();
-      let timeDiff = curWheelTime - this.preWheelTime;
-      this.preWheelTime = curWheelTime;
-
-      if (timeDiff < 200) return;   //timeDiff < 200 to be considered as one wheelEvent
-
+      let timeDiff = curWheelTime - preWheelTime;
+      preWheelTime = curWheelTime;
+      if (timeDiff > 200) {
+        wheels = [];
+      }
+      if (wheels.length > 99) {
+        wheels.shift();
+      }
       let delta = getWheelDelta(event);
-      if (delta > 0) {
-        this.prev();
-      } else {
-        this.next();
+      wheels.push(Math.abs(delta));
+
+      if (!this.isMoving() && this.isAccelerating()) {
+        if (delta > 0) {
+          this.prev();
+        } else {
+          this.next();
+        }
       }
     },
     handleKeyDown(event) {
@@ -97,8 +119,6 @@ export default {
       }
     },
     moveTo(index) {
-      if (this.isMoving()) return;
-
       console.log('moveTo:' + index);
       let direction; // 1 --- UP, -1 --- DOWN
       let animateItem;
@@ -133,7 +153,7 @@ export default {
         }
       }
 
-      this.lastAnimationTime = new Date().getTime();
+      lastAnimationTime = new Date().getTime();
       this.index = index;
     }
   },

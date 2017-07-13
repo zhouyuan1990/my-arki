@@ -22,9 +22,9 @@ export default {
   name: 'resume-index',
   data () {
     return {
-      index: 0,
-      pages: []
     }
+  },
+  methods: {
   },
   components: {
     'resume': Resume,

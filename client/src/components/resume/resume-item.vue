@@ -8,14 +8,26 @@
 export default {
   name: 'resume-item',
   props: {
-    index: {
-      type: Number,
-      default: 0
+  },
+  data() {
+    return {
+      index: -1,
+      zIndex: 0
+    }
+  },
+  methods: {
+    initIndex() {
+      this.index = this.$parent.$slots.item.indexOf(this.$vnode);
+    },
+    initZIndex() {
+      this.zIndex = this.$parent.$slots.item.length - this.index;
     }
   },
   mounted() {
     this.$parent && this.$parent.resumeItemCreated(this);
-    debugger;
+    // this.initIndex();
+    // this.initZIndex();
+    // console.log(this.bb)
   },
   destroyed() {
     this.$parent && this.$parent.resumeItemDestroyed(this);
@@ -32,5 +44,8 @@ export default {
 }
 .item-easing {
   transition: all 1000ms cubic-bezier(0.550, 0.085, 0.000, 0.990);
+}
+.moveOut {
+  transform: translate3d(0px, 100%, 0px);
 }
 </style>
