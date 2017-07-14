@@ -1,13 +1,11 @@
 <template>
-  <resume>
-    <resume-item slot="item" :cur-idx="currentIndex">
-      <home class="home"></home>
-    </resume-item>
-    <resume-item slot="item" :cur-idx="currentIndex">
-      <project class="project"></project>
-    </resume-item>
-    <resume-item slot="item" :cur-idx="currentIndex">
-      <home class="home2"></home>
+  <resume :pages>
+    <resume-item slot="item"
+                 :cur-idx="currentIndex"
+                 v-for="(item, $index) in items"
+                 :key="$index"
+                 :class="'item-' + $index">
+      <component :is="item.name"></component>
     </resume-item>
   </resume>
 </template>
@@ -22,7 +20,13 @@ export default {
   name: 'resume-index',
   data () {
     return {
-      currentIndex: 0
+      currentIndex: 0,
+      items: [
+        { name: 'home', title: 'Home' },
+        { name: 'project', title: 'Project' },
+        { name: 'home', title: 'Home2' },
+        { name: 'project', title: 'Project2' }
+      ]
     }
   },
   methods: {
@@ -44,17 +48,19 @@ export default {
   width: 100%;
   height: 100%; 
 }
-.resume-item .home {
+.item-0 {
   background-color: #EFCEE8;
 }
-.resume-item .project {
+.item-1 {
   background-color: #F3D7B5;
 }
-.resume-item .home2 {
+.item-2 {
   background-color:#FDFFDF;
 }
-/*
-background-color:#DAF9CA;
-background-color:#C7B3E5;
-*/
+.item-3 {
+  background-color:#DAF9CA;
+}
+.item-4 {
+  background-color:#C7B3E5;
+}
 </style>

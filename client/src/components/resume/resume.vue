@@ -13,7 +13,8 @@
     <ul class="indicators" ref="indicators">
       <li class="indicator"
           v-for="(page, $index) in pages"
-          :class="{ 'is-active': $index === index }">
+          :class="{ 'is-active': $index === index }"
+          :key="$index">
         <a href="#"></a>      
       </li>
     </ul>
