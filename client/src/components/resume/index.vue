@@ -1,12 +1,12 @@
 <template>
   <resume>
-    <resume-item slot="item">
+    <resume-item slot="item" :cur-idx="currentIndex">
       <home class="home"></home>
     </resume-item>
-    <resume-item slot="item">
+    <resume-item slot="item" :cur-idx="currentIndex">
       <project class="project"></project>
     </resume-item>
-    <resume-item slot="item">
+    <resume-item slot="item" :cur-idx="currentIndex">
       <home class="home2"></home>
     </resume-item>
   </resume>
@@ -22,9 +22,13 @@ export default {
   name: 'resume-index',
   data () {
     return {
+      currentIndex: 0
     }
   },
   methods: {
+    passIndex(idx) {
+      this.currentIndex = idx;
+    }
   },
   components: {
     'resume': Resume,

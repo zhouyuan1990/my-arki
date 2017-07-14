@@ -52,9 +52,7 @@ export default {
       this.index = 0;
       
       children.forEach(function(child, index) {
-        let elm = child.elm;
-        pages.push(elm);
-        elm.style.zIndex = length - index;
+        pages.push(child.elm);
       });
 
       this.pages = pages;
@@ -120,41 +118,9 @@ export default {
     },
     moveTo(index) {
       console.log('moveTo:' + index);
-      let direction; // 1 --- UP, -1 --- DOWN
-      let animateItem;
-
-      if (index > this.index) {
-        direction = -1;
-      } else {
-        direction = 1;
-      }
-
-      if (!this.transformKey) {
-        transformKeys.every((key) => {
-          if (document.body.style[key] == undefined) {
-            return true;
-          } else {
-            this.transformKey = key;
-            return false;
-          }
-        });
-      }
-
-      let loopFrom = Math.min(this.index, index);
-      let loopTo = Math.max(this.index, index) - 1;
-      console.log(loopFrom + '-' + loopTo);
-      
-      for (let i = loopFrom; i < loopTo + 1; i++) {
-        let item = this.pages[i];
-        if (direction < 0) {
-          item.style[this.transformKey] = 'translate3d(0px, -100%, 0px)';
-        } else {
-          item.style[this.transformKey] = '';
-        }
-      }
-
       lastAnimationTime = new Date().getTime();
       this.index = index;
+      this.$parent.passIndex(this.index);
     }
   },
   mounted() {
