@@ -163,7 +163,7 @@ export default {
 }
 .indicators {
   top: 50%;
-  transform: translateX(-50%);
+  transform: translateY(-50%);
   margin-left: 0.7rem;
 }
 .indicator {

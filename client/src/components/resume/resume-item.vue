@@ -57,8 +57,8 @@ export default {
 .moveOut {
   transform: translate3d(0px, -100%, 0px);
 }
-.item-0 {
-  background-color: #EFCEE8;
+.resume-item {
+  background-color: #fff;
 }
 .item-1 {
   background-color: #F3D7B5;

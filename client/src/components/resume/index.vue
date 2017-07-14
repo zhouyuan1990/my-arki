@@ -1,12 +1,12 @@
 <template>
-  <resume :pages="pages" :messages="messages" :lang="lang">
+  <resume :pages="pages" :messages="messages" :lang="lang" :class="lang">
     <resume-item slot="item"
                  :cur-idx="currentIndex"
                  v-for="(page, $index) in pages"
                  :key="$index"
                  :class="'item-' + $index"
                  :messages="messages">
-      <component :is="page.name"></component>
+      <component :is="page.name" :messages="messages"></component>
     </resume-item>
   </resume>
 </template>

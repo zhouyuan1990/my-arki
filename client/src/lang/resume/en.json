@@ -4,5 +4,8 @@
     "me": "About Me",
     "project": "Project",
     "technology": "Technology"
+  },
+  "home": {
+    "sentence": "Capture every single pixel"
   }
 }
