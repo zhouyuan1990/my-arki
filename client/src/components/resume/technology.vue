@@ -1,10 +1,10 @@
 <template>
-  <div tabindex="1">姓名：周圆</div>
+  <div tabindex="1">technology</div>
 </template>
 
 <script>
 export default {
-  name: 'home',
+  name: 'technology',
   data () {
     return {
     }

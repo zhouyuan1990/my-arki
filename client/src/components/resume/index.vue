@@ -1,11 +1,12 @@
 <template>
-  <resume :pages>
+  <resume :pages="pages" :messages="messages" :lang="lang">
     <resume-item slot="item"
                  :cur-idx="currentIndex"
-                 v-for="(item, $index) in items"
+                 v-for="(page, $index) in pages"
                  :key="$index"
-                 :class="'item-' + $index">
-      <component :is="item.name"></component>
+                 :class="'item-' + $index"
+                 :messages="messages">
+      <component :is="page.name"></component>
     </resume-item>
   </resume>
 </template>
@@ -14,53 +15,54 @@
 import Resume from './resume.vue';
 import ResumeItem from './resume-item.vue';
 import Home from './home.vue';
+import Me from './me.vue';
 import Project from './project.vue';
+import Technology from './technology.vue';
+import zh from '../../lang/resume/zh.json';
+import en from '../../lang/resume/en.json';
 
 export default {
   name: 'resume-index',
   data () {
     return {
       currentIndex: 0,
-      items: [
-        { name: 'home', title: 'Home' },
-        { name: 'project', title: 'Project' },
-        { name: 'home', title: 'Home2' },
-        { name: 'project', title: 'Project2' }
-      ]
+      pages: [],
+      lang: 'zh',
+      messages: zh
+    }
+  },
+  watch: {
+    lang(lang) {
+      if (lang == 'zh') {
+        this.messages = zh;
+      } else if (lang == 'en') {
+        this.messages = en;
+      }
     }
   },
   methods: {
     passIndex(idx) {
       this.currentIndex = idx;
+    },
+    setLang(lang) {
+      this.lang = lang;
     }
   },
   components: {
     'resume': Resume,
     'resume-item': ResumeItem,
     'home': Home,
-    'project': Project
+    'me': Me,
+    'project': Project,
+    'technology': Technology
+  },
+  created() {
+    this.pages = [
+      { name: 'home', title: 'home' },
+      { name: 'me', title: 'me' },
+      { name: 'project', title: 'project' },
+      { name: 'technology', title: 'technology' }
+    ];
   }
 }
 </script>
-
-<style>
-.resume-item > div {
-  width: 100%;
-  height: 100%; 
-}
-.item-0 {
-  background-color: #EFCEE8;
-}
-.item-1 {
-  background-color: #F3D7B5;
-}
-.item-2 {
-  background-color:#FDFFDF;
-}
-.item-3 {
-  background-color:#DAF9CA;
-}
-.item-4 {
-  background-color:#C7B3E5;
-}
-</style>

@@ -4,8 +4,12 @@
        @wheel="handleWheel"
        @keydown="handleKeyDown">
     <div class="lang-panel">
-      <a class="lang">中</a>
-      <a class="lang">En</a>
+      <a class="lang"
+         :class="[ lang == 'zh' ? 'is-active' : 'not-active' ]"
+         @click="toggleLang('zh')">中</a>
+      <a class="lang"
+         :class="[ lang == 'en' ? 'is-active' : 'not-active' ]"
+         @click="toggleLang('en')">En</a>
     </div>
     <ul class="main">
       <slot name="item"></slot>
@@ -15,14 +19,14 @@
           v-for="(page, $index) in pages"
           :class="{ 'is-active': $index === index }"
           :key="$index">
-        <a href="#"></a>      
+        <a @click="moveTo($index)"></a>      
+        <div>{{ messages.title[page.title] }}</div>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { addClass, removeClass } from '../../utils/class';
 import { getWheelDelta } from '../../utils/event';
 
 const transformKeys = ['webkitTransform', 'OTransform', 'msTransform', 'MozTransform', 'transform'];
@@ -34,29 +38,28 @@ export default {
   name: 'resume',
   data() {
     return {
-      ready: false,
-      index: 0,
-      pages: [],
-      bb: 1,
-      transformKey: null
+      index: 0
+    }
+  },
+  props: {
+    pages: {
+      type: Array,
+      default: []
+    },
+    messages: {
+      type: Object,
+      default: {}
+    },
+    lang: {
+      type: String,
+      default: 'zh'
     }
   },
   methods: {
-    resumeItemCreated() {
-    },
-    resumeItemDestroyed() {
-    },
-    reInitPages() {
-      let children = this.$slots.item,
-          pages = [],
-          length = children.length;
-      this.index = 0;
-      
-      children.forEach(function(child, index) {
-        pages.push(child.elm);
-      });
-
-      this.pages = pages;
+    toggleLang(lang) {
+      if (lang != this.lang){
+        this.$parent.setLang(lang);
+      }
     },
     isMoving() {
       let curTime = new Date().getTime();
@@ -118,16 +121,13 @@ export default {
       }
     },
     moveTo(index) {
-      console.log('moveTo:' + index);
-      lastAnimationTime = new Date().getTime();
-      this.index = index;
-      this.$parent.passIndex(this.index);
+      if (!this.isMoving() && index != this.index) {
+        console.log('moveTo:' + index);
+        lastAnimationTime = new Date().getTime();
+        this.index = index;
+        this.$parent.passIndex(this.index);
+      }
     }
-  },
-  mounted() {
-    this.ready = true;
-    this.reInitPages();
-    let element = this.$el;
   }
 }
 </script>
@@ -141,6 +141,21 @@ export default {
   right: 2rem;
   top: 2rem;
 }
+.lang {
+  padding: 0.3rem 0.4rem;
+  border-radius: 0.5rem;
+  color: #2c3e50;
+}
+.lang.is-active{
+  background-color: rgba(255,255,255,0.6);
+  cursor: default;
+}
+.lang.not-active{
+  cursor: pointer;
+}
+.lang.not-active:hover {
+  color: #95a5a6;
+}
 .main {
   position: absolute;
   height: 100%;
@@ -152,6 +167,7 @@ export default {
   margin-left: 0.7rem;
 }
 .indicator {
+  position: relative;
   height: 0.7rem;
   width: 0.7rem;
   padding: 0.15rem 0 0.15rem 0;
@@ -165,8 +181,25 @@ export default {
   border-radius: 50%;
   background-color: #fff;
   opacity: 0.25;
+  cursor: pointer;
 }
 .indicator.is-active > a {
   opacity: 0.9;
+}
+.indicator > div {
+  position: absolute;
+  white-space: nowrap;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  color: #fff;
+  transition: opacity 200ms linear;
+}
+.indicator > a + div {
+  opacity: 0;
+}
+.indicator > a:hover + div {
+  opacity: 1;
 }
 </style>
