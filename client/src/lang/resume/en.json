@@ -1,11 +1,9 @@
 {
-  "title": {
-    "home": "Home",
-    "me": "About Me",
-    "project": "Project",
-    "technology": "Technology"
-  },
-  "home": {
-    "sentence": "Capture every single pixel"
-  }
+  "title_home": "Home",
+  "title_me": "About Me",
+  "title_project": "Project",
+  "title_technology": "Technology",
+  "home_first_name": "Arki",
+  "home_last_name": "Zhou",
+  "home_sentence": "Capture every single pixel"
 }

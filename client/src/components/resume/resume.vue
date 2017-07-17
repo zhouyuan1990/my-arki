@@ -3,14 +3,6 @@
        @mouseWheel="handleWheel"
        @wheel="handleWheel"
        @keydown="handleKeyDown">
-    <div class="lang-panel">
-      <a class="lang"
-         :class="[ lang == 'zh' ? 'is-active' : 'not-active' ]"
-         @click="toggleLang('zh')">中</a>
-      <a class="lang"
-         :class="[ lang == 'en' ? 'is-active' : 'not-active' ]"
-         @click="toggleLang('en')">En</a>
-    </div>
     <ul class="main">
       <slot name="item"></slot>
     </ul>
@@ -20,16 +12,13 @@
           :class="{ 'is-active': $index === index }"
           :key="$index">
         <a @click="moveTo($index)"></a>      
-        <div>{{ messages.title[page.title] }}</div>
+        <div>{{ page.title }}</div>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { getWheelDelta } from '../../utils/event';
-
-const transformKeys = ['webkitTransform', 'OTransform', 'msTransform', 'MozTransform', 'transform'];
 let preWheelTime = 0,
     lastAnimationTime = 0,
     wheels = [];
@@ -44,11 +33,9 @@ export default {
   props: {
     pages: {
       type: Array,
-      default: []
-    },
-    messages: {
-      type: Object,
-      default: {}
+      default: function() {
+        return [];
+      }
     },
     lang: {
       type: String,
@@ -56,11 +43,6 @@ export default {
     }
   },
   methods: {
-    toggleLang(lang) {
-      if (lang != this.lang){
-        this.$parent.setLang(lang);
-      }
-    },
     isMoving() {
       let curTime = new Date().getTime();
       let animationDuration = 1000;
@@ -68,6 +50,10 @@ export default {
         return true;
       }
       return false;
+    },
+    getWheelDelta(event) {
+      let delta = event.wheelDelta || -event.deltaY || -event.detail;
+      return delta;
     },
     isAccelerating() {
       if (wheels.length < 10) return true;
@@ -95,7 +81,7 @@ export default {
       if (wheels.length > 99) {
         wheels.shift();
       }
-      let delta = getWheelDelta(event);
+      let delta = this.getWheelDelta(event);
       wheels.push(Math.abs(delta));
 
       if (!this.isMoving() && this.isAccelerating()) {
@@ -133,35 +119,14 @@ export default {
 </script>
 
 <style scoped>
-.lang-panel, .indicators {
-  position: absolute;
-  z-index: 100;
-}
-.lang-panel {
-  right: 2rem;
-  top: 2rem;
-}
-.lang {
-  padding: 0.3rem 0.4rem;
-  border-radius: 0.5rem;
-  color: #2c3e50;
-}
-.lang.is-active{
-  background-color: rgba(255,255,255,0.6);
-  cursor: default;
-}
-.lang.not-active{
-  cursor: pointer;
-}
-.lang.not-active:hover {
-  color: #95a5a6;
-}
 .main {
   position: absolute;
   height: 100%;
   width: 100%;
 }
 .indicators {
+  position: absolute;
+  z-index: 100;
   top: 50%;
   transform: translateY(-50%);
   margin-left: 0.7rem;

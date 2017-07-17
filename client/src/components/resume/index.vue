@@ -1,14 +1,23 @@
 <template>
-  <resume :pages="pages" :messages="messages" :lang="lang" :class="lang">
-    <resume-item slot="item"
-                 :cur-idx="currentIndex"
-                 v-for="(page, $index) in pages"
-                 :key="$index"
-                 :class="'item-' + $index"
-                 :messages="messages">
-      <component :is="page.name" :messages="messages"></component>
-    </resume-item>
-  </resume>
+  <div>
+    <div class="lang-panel">
+      <a class="lang"
+         :class="[ lang == 'zh' ? 'is-active' : 'not-active' ]"
+         @click="setLang('zh')">中</a>
+      <a class="lang"
+         :class="[ lang == 'en' ? 'is-active' : 'not-active' ]"
+         @click="setLang('en')">En</a>
+    </div>
+    <resume :pages="pages" :lang="lang" :class="lang">
+      <resume-item slot="item"
+                   :cur-idx="currentIndex"
+                   v-for="(page, $index) in pages"
+                   :key="$index"
+                   :class="'item-' + $index">
+        <component :is="page.name" :messages="messages"></component>
+      </resume-item>
+    </resume>
+  </div>
 </template>
 
 <script>
@@ -26,9 +35,8 @@ export default {
   data () {
     return {
       currentIndex: 0,
-      pages: [],
       lang: 'zh',
-      messages: zh
+      messages: zh,
     }
   },
   watch: {
@@ -48,6 +56,16 @@ export default {
       this.lang = lang;
     }
   },
+  computed: {
+    pages() {
+      return [
+        { name: 'home', title: this.messages['title_home'] },
+        { name: 'me', title: this.messages['title_me'] },
+        { name: 'project', title: this.messages['title_project'] },
+        { name: 'technology', title: this.messages['title_technology'] }
+      ];
+    }
+  },
   components: {
     'resume': Resume,
     'resume-item': ResumeItem,
@@ -55,14 +73,31 @@ export default {
     'me': Me,
     'project': Project,
     'technology': Technology
-  },
-  created() {
-    this.pages = [
-      { name: 'home', title: 'home' },
-      { name: 'me', title: 'me' },
-      { name: 'project', title: 'project' },
-      { name: 'technology', title: 'technology' }
-    ];
   }
 }
 </script>
+<style scoped>
+.lang-panel {
+  position: absolute;
+  z-index: 100;
+}
+.lang-panel {
+  right: 2rem;
+  top: 2rem;
+}
+.lang {
+  padding: 0.3rem 0.4rem;
+  border-radius: 0.5rem;
+  color: #2c3e50;
+}
+.lang.is-active{
+  background-color: rgba(255,255,255,0.6);
+  cursor: default;
+}
+.lang.not-active{
+  cursor: pointer;
+}
+.lang.not-active:hover {
+  color: #95a5a6;
+}
+</style>

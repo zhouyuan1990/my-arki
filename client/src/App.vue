@@ -30,7 +30,7 @@ div:focus {
 h1, h2, h3, h4, h5 {
   padding: 0;
   margin: 0;
-  font-weight: 500；
+  font-weight: 500;
 }
 h1 {
   font-size: 5rem;

@@ -13,10 +13,6 @@ export default {
     curIdx: {
       type: Number,
       default: 0
-    },
-    messages: {
-      type: Object,
-      default: {}
     }
   },
   data() {

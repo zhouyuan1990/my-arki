@@ -1,11 +1,9 @@
 {
-  "title": {
-    "home": "首页",
-    "me": "关于我",
-    "project": "项目",
-    "technology": "技术"
-  },
-  "home": {
-    "sentence": "把握每个像素的精彩"
-  }
+  "title_home": "首页",
+  "title_me": "关于我",
+  "title_project": "项目",
+  "title_technology": "技术",
+  "home_first_name": "周",
+  "home_last_name": "圆",
+  "home_sentence": "把握每个像素的精彩"
 }

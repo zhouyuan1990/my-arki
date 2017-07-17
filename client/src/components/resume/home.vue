@@ -2,8 +2,8 @@
   <div class="resume-home">
     <div class="main">
       <div class="block">
-        <h1>{{ messages.home.sentence }}</h1>
-        <h3>{{ messages.title.home }}</h3>
+        <h1>{{ messages['home_sentence'] }}</h1>
+        <h3>{{ messages['home_first_name'] + messages['home_last_name'] }}</h3>
       </div>
     </div>
   </div>
