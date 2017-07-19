@@ -8,21 +8,17 @@
          :class="[ lang == 'en' ? 'is-active' : 'not-active' ]"
          @click="setLang('en')">En</a>
     </div>
-    <resume :pages="pages" :lang="lang" :class="lang">
-      <resume-item slot="item"
-                   :cur-idx="currentIndex"
-                   v-for="(page, $index) in pages"
-                   :key="$index"
-                   :class="'item-' + $index">
-        <component :is="page.name" :messages="messages"></component>
-      </resume-item>
-    </resume>
+    <page-swipe>
+      <home slot="page-swipe-item" :swipe-title="messages.title_home" :messages="messages"></home>
+      <me slot="page-swipe-item" :swipe-title="messages.title_me" :messages="messages"></me>
+      <project slot="page-swipe-item" :swipe-title="messages.title_project" :messages="messages"></project>
+      <technology slot="page-swipe-item" :swipe-title="messages.title_technology" :messages="messages"></technology>
+    </page-swipe>
   </div>
 </template>
 
 <script>
-import Resume from './resume.vue';
-import ResumeItem from './resume-item.vue';
+import PageSwipe from '../utils/page-swipe.vue';
 import Home from './home.vue';
 import Me from './me.vue';
 import Project from './project.vue';
@@ -34,7 +30,6 @@ export default {
   name: 'resume-index',
   data () {
     return {
-      currentIndex: 0,
       lang: 'zh',
       messages: zh,
     }
@@ -49,26 +44,12 @@ export default {
     }
   },
   methods: {
-    passIndex(idx) {
-      this.currentIndex = idx;
-    },
     setLang(lang) {
       this.lang = lang;
     }
   },
-  computed: {
-    pages() {
-      return [
-        { name: 'home', title: this.messages['title_home'] },
-        { name: 'me', title: this.messages['title_me'] },
-        { name: 'project', title: this.messages['title_project'] },
-        { name: 'technology', title: this.messages['title_technology'] }
-      ];
-    }
-  },
   components: {
-    'resume': Resume,
-    'resume-item': ResumeItem,
+    'page-swipe': PageSwipe,
     'home': Home,
     'me': Me,
     'project': Project,
@@ -99,5 +80,19 @@ export default {
 }
 .lang.not-active:hover {
   color: #95a5a6;
+}
+</style>
+<style>
+.item-1 {
+  background-color: #F3D7B5;
+}
+.item-2 {
+  background-color:#FDFFDF;
+}
+.item-3 {
+  background-color:#DAF9CA;
+}
+.item-4 {
+  background-color:#C7B3E5;
 }
 </style>

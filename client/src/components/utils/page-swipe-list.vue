@@ -1,7 +1,7 @@
 <template>
-  <div class="resume" tabindex="1" 
-       @mouseWheel="handleWheel"
-       @wheel="handleWheel"
+  <div class="page-swipe-list" tabindex="1" 
+       @mouseWheel.prevent="handleWheel"
+       @wheel.prevent="handleWheel"
        @keydown="handleKeyDown">
     <ul class="main">
       <slot name="item"></slot>
@@ -12,7 +12,7 @@
           :class="{ 'is-active': $index === index }"
           :key="$index">
         <a @click="moveTo($index)"></a>      
-        <div>{{ page.title }}</div>
+        <div>{{ page.data.attrs['swipe-title'] }}</div>
       </li>
     </ul>
   </div>
@@ -24,7 +24,7 @@ let preWheelTime = 0,
     wheels = [];
 
 export default {
-  name: 'resume',
+  name: 'page-swipe-list',
   data() {
     return {
       index: 0
@@ -36,10 +36,6 @@ export default {
       default: function() {
         return [];
       }
-    },
-    lang: {
-      type: String,
-      default: 'zh'
     }
   },
   methods: {
@@ -52,7 +48,8 @@ export default {
       return false;
     },
     getWheelDelta(event) {
-      let delta = event.wheelDelta || -event.deltaY || -event.detail;
+      let value = event.wheelDelta || -event.deltaY || -event.detail;
+      let delta = Math.max(-1, Math.min(1, value));
       return delta;
     },
     isAccelerating() {
@@ -70,8 +67,6 @@ export default {
       return Math.ceil(sum/number);
     },
     handleWheel(event) {
-      event.preventDefault();   //prevent page drag down in mac
-
       let curWheelTime = new Date().getTime();
       let timeDiff = curWheelTime - preWheelTime;
       preWheelTime = curWheelTime;
@@ -93,8 +88,28 @@ export default {
       }
     },
     handleKeyDown(event) {
-      console.log('keydown');
-      console.log(event);
+      if (this.isMoving()) return;
+
+      switch(event.keyCode) {
+        case 38:  //ArrowUp
+        case 33:  //PageUp
+        case 37:  //ArrowLeft
+            this.prev();
+            break;
+        case 40:  //ArrowDown
+        case 34:  //PageDown
+        case 39:  //ArrowRight
+            this.next()
+            break;
+        case 36:  //Home
+            this.moveTo(0);
+            break;
+        case 35:  //End
+            this.moveTo(this.pages.length - 1);
+            break;
+        default:
+            return;
+      }
     },
     next() {
       if (this.index < this.pages.length - 1) {
@@ -108,7 +123,6 @@ export default {
     },
     moveTo(index) {
       if (!this.isMoving() && index != this.index) {
-        console.log('moveTo:' + index);
         lastAnimationTime = new Date().getTime();
         this.index = index;
         this.$parent.passIndex(this.index);
@@ -117,16 +131,33 @@ export default {
   }
 }
 </script>
+<style>
+body {
+  padding: 0;
+  margin: 0;
+  font-weight: 400;
+}
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+div:focus {
+  outline: none;
+}
+</style>
 
 <style scoped>
+.indicators {
+  position: absolute;
+  z-index: 100;
+}
 .main {
   position: absolute;
   height: 100%;
   width: 100%;
 }
 .indicators {
-  position: absolute;
-  z-index: 100;
   top: 50%;
   transform: translateY(-50%);
   margin-left: 0.7rem;
