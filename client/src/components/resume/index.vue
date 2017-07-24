@@ -9,16 +9,16 @@
          @click="setLang('en')">En</a>
     </div>
     <page-swipe>
-      <home slot="page-swipe-item" :swipe-title="messages.title_home" :messages="messages"></home>
-      <me slot="page-swipe-item" :swipe-title="messages.title_me" :messages="messages"></me>
-      <project slot="page-swipe-item" :swipe-title="messages.title_project" :messages="messages"></project>
-      <technology slot="page-swipe-item" :swipe-title="messages.title_technology" :messages="messages"></technology>
+      <home :swipe-title="messages.title_home" :messages="messages"></home>
+      <me :swipe-title="messages.title_me" :messages="messages"></me>
+      <project :swipe-title="messages.title_project" :messages="messages"></project>
+      <technology :swipe-title="messages.title_technology" :messages="messages"></technology>
     </page-swipe>
   </div>
 </template>
 
 <script>
-import PageSwipe from '../utils/page-swipe.vue';
+import PageSwipe from 'vue-page-swipe';
 import Home from './home.vue';
 import Me from './me.vue';
 import Project from './project.vue';
