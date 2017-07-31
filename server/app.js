@@ -9,6 +9,7 @@ const bodyParser = require('koa-bodyparser');
 const routers = require('./routes/routers');
 const serve = require('koa-static');
 const historyApiFallback = require('koa-history-api-fallback');
+const WebSocket = require('ws');
 
 let app = new Koa();
 
@@ -32,8 +33,53 @@ if (!IS_DEV) {
 }
 
 let port = 8889;
+let server = app.listen(port);
 
-app.listen(port);
+//WebSocket
+function createWebSocketServer(server, onConnection, onMessage, onClose, onError) {
+  let wss = new WebSocket.Server({
+    server: server
+  });
+  wss.broadcast = function broadcast(data) {
+    wss.clients.forEach(function each(client) {
+      client.send(data);
+    });
+  };
+  onConnection = onConnection || function () {
+    console.log('[WebSocket] connected.');
+  };
+  onMessage = onMessage || function (msg) {
+    console.log('[WebSocket] message received: ' + msg);
+  };
+  onClose = onClose || function (code, message) {
+    console.log(`[WebSocket] closed: ${code} - ${message}`);
+  };
+  onError = onError || function (err) {
+    console.log('[WebSocket] error: ' + err);
+  };
+  wss.on('connection', function (ws) {
+    // let location = url.parse(ws.upgradeReq.url, true);
+    // console.log('[WebSocketServer] connection: ' + location.href);
+    ws.on('message', onMessage);
+    ws.on('close', onClose);
+    ws.on('error', onError);
+    // if (location.pathname !== '/ws/chat') {
+    //   ws.close(4000, 'Invalid URL');
+    // }
+    // check user:
+    // let user = parseUser(ws.upgradeReq);
+    // if (!user) {
+    //   ws.close(4001, 'Invalid user');
+    // }
+    // ws.user = user;
+    ws.wss = wss;
+    onConnection.apply(ws);
+  });
+  console.log('WebSocketServer was attached.');
+  return wss;
+}
+
+app.wss = createWebSocketServer(server);
 
 console.log(`[Myarki] listening on port ${port}.`);
 if (IS_DEV) {
