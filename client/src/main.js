@@ -4,9 +4,11 @@ import Vue from 'vue';
 import Axios from 'axios';
 import App from './App';
 import router from './router';
+import markdown from './utils/markdown';
 
 Vue.prototype.$http = Axios;
 Vue.config.productionTip = false;
+Vue.filter('markdown', markdown);
 
 /* eslint-disable no-new */
 new Vue({
